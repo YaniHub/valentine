@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Interactive GIF</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffe6e6;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        #gif {
+            width: 300px;
+            height: 300px;
+            background-color: white;
+            border: 5px solid #ff6699;
+            border-radius: 20px;
+            object-fit: cover;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 12px;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        #yesButton {
+            background-color: #ff4d4d;
+            color: white;
+        }
+        #yesButton:hover {
+            background-color: #ff1a1a;
+            transform: scale(1.1);
+        }
+        #noButton {
+            background-color: #ffcccc;
+            color: #800000;
+        }
+        #noButton:hover {
+            background-color: #ff9999;
+        }
+        p {
+            color: #cc0052;
+            font-size: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container">
+        <img id="gif" src="mocha-bear-hearts.gif" alt="Mocha Bear Hearts GIF">
+
+        <div class="button-container">
+            <p id="valentineQuestion">Will you be my Valentine?</p>
+            <button id="yesButton">Yes</button>
+            <button id="noButton">No</button>
+        </div>
+
+        <p id="thankYouMessage" style="display: none;">Yeheeyy! Sabi ko na po payag ka agad ihh! I LOVE YOUUU SO MUCHHH! SEE YAHHH! ❤️</p>
+    </div>
+
+    <script>
+        const noButton = document.getElementById('noButton');
+        const yesButton = document.getElementById('yesButton');
+        const gif = document.getElementById('gif');
+        const thankYouMessage = document.getElementById('thankYouMessage');
+        const valentineQuestion = document.getElementById('valentineQuestion');
+
+        const pleadingTexts = [
+            "100% sure?",
+            "Wehhh?",
+            "Sigurado na po ba 'yan?",
+            "Maniwala?",
+            "Baby, are you sure?",
+            "Love, please say yes!",
+            "Misis ko, payag na ikaw po ikaw!",
+            "Mahal, please po!",
+            "Bebi, don't leave me hanging!",
+            "Sweetheart, bigyan po kita another chance",
+            "Darling, yieee, yes na 'yan",
+            "Bebilabs, please reconsider!",
+            "Labidabs, please!",
+            "Sweetie pie, don't make me hurtipie!",
+            "Sugarplum ko, mag-yes na 'yan!",
+            "Honey bunch, say yes for me!"
+        ];
+
+        let unusedPleadingTexts = [...pleadingTexts];
+        let yesButtonSize = 16;
+
+        function getRandomPleadingText() {
+            if (unusedPleadingTexts.length === 0) {
+                unusedPleadingTexts = [...pleadingTexts];
+            }
+            const randomIndex = Math.floor(Math.random() * unusedPleadingTexts.length);
+            return unusedPleadingTexts.splice(randomIndex, 1)[0];
+        }
+
+        noButton.addEventListener('click', () => {
+            const maxX = window.innerWidth - noButton.offsetWidth;
+            const maxY = window.innerHeight - noButton.offsetHeight;
+
+            let randomX, randomY;
+            const gifRect = gif.getBoundingClientRect();
+            const yesButtonRect = yesButton.getBoundingClientRect();
+
+            do {
+                randomX = Math.random() * maxX;
+                randomY = Math.random() * maxY;
+            } while (
+                (randomX + noButton.offsetWidth > gifRect.left && randomX < gifRect.right &&
+                 randomY + noButton.offsetHeight > gifRect.top && randomY < gifRect.bottom) ||
+                (randomX + noButton.offsetWidth > yesButtonRect.left && randomX < yesButtonRect.right &&
+                 randomY + noButton.offsetHeight > yesButtonRect.top && randomY < yesButtonRect.bottom)
+            );
+
+            noButton.style.position = 'absolute';
+            noButton.style.left = `${randomX}px`;
+            noButton.style.top = `${randomY}px`;
+
+            noButton.textContent = getRandomPleadingText();
+
+            yesButtonSize += 30;
+            yesButton.style.fontSize = `${yesButtonSize}px`;
+        });
+
+        yesButton.addEventListener('click', () => {
+            gif.src = "sami-en-dina-sami-dina.gif";
+            noButton.remove();
+            yesButton.remove();
+            valentineQuestion.remove();
+            thankYouMessage.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
